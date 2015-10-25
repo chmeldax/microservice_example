@@ -1,5 +1,9 @@
 PyYAML==3.11
 Werkzeug==0.10.4
+ecdsa==0.13
 json-rpc==1.10.2
+paramiko==1.15.3
 psycopg2==2.6.1
+pycrypto==2.6.1
 redis==2.10.3
+yoyo-migrations==4.2.5
