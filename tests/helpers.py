@@ -8,12 +8,12 @@ from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 from microservice import components
 
 
-class TestDatabase():
+class TestDatabase(object):
 
     def __init__(self):
         self._ddl_conn = components.get_psql()
         self._ddl_conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-        self._name = self._generate_name()
+        self._name = generate_name()
         self._create_database()
         self._conn = components.get_psql(dbname=self._name)
 
@@ -60,10 +60,12 @@ class TestDatabase():
         sql += ','.join(['(' + ','.join(keys) + ')'] * len(rows))
         return sql, [item for sublist in rows for item in sublist]
 
-    def _generate_name(self):
-        timestamp = int(time.time())
-        random.seed()
-        return 'test_{}_{}'.format(timestamp, random.randint(1, 10))
-
     def close(self):
-        pass
+        self._conn.close()
+        with self._ddl_conn.cursor() as cur:
+            cur.execute('DROP DATABASE ' + self._name)
+
+def generate_name():
+    timestamp = int(time.time())
+    random.seed()
+    return 'test_{}_{}'.format(timestamp, random.randint(1, 10))
