@@ -12,8 +12,11 @@ test: all
 	env/bin/python3 -m unittest discover
 
 clean:
-	rm -rf .env
+	rm -rf env
+	find . -name '*.py?' -delete
 
 deploy: all
 	env/bin/python3 ./deploy.py
 
+run: all
+	env/bin/gunicorn microservice.main:application

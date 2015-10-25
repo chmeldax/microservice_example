@@ -57,7 +57,7 @@ class Application(object):
         releases_path = os.path.join(self._get_app_path(), 'releases')
         source = os.path.join(releases_path, self._version)
         destination = os.path.join(releases_path, 'current')
-        self._perform_ssh_command('ln -s {} {}'.format(source, destination))
+        self._perform_ssh_command('ln -sfn {} {}'.format(source, destination))
 
     def _perform_ssh_command(self, command: str):
         stdin, stdout, stderr = self._client.exec_command(command)

@@ -20,7 +20,11 @@ class Microservice(Application):
         self._do_migrations()
 
     def _after_promote(self):
-        self._perform_ssh_command('./bin/gunicorn restart')
+        current_path = os.path.join(self._get_app_path(), 'releases', 'current')
+        pid_file = os.path.join(self._get_app_path(), 'releases', 'gunicorn.pid')
+        self._perform_ssh_command(
+            'kill -HUP $(cat {} 2>>/dev/null)  2>>/dev/null || (cd {}; ./env/bin/gunicorn microservice.main:application -D -p {})'.
+            format(pid_file, current_path, pid_file))
 
     def _do_migrations(self):
         current_dir = os.path.dirname(__file__)
