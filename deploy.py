@@ -7,6 +7,7 @@ from yoyo.connections import exceptions
 from misc.deploy import Application
 from microservice import components
 
+
 class Microservice(Application):
 
     def _check(self):
@@ -23,10 +24,12 @@ class Microservice(Application):
         current_path = os.path.join(self._get_app_path(), 'releases', 'current')
         pid_file = os.path.join(self._get_app_path(), 'releases', 'gunicorn.pid')
         self._perform_ssh_command(
-            'kill -HUP $(cat {} 2>>/dev/null)  2>>/dev/null || (cd {}; ./env/bin/gunicorn microservice.main:application -D -p {})'.
+            'kill -HUP $(cat {} 2>>/dev/null)  2>>/dev/null || '
+            '(cd {}; ./env/bin/gunicorn microservice.main:application -D -p {})'.
             format(pid_file, current_path, pid_file))
 
-    def _do_migrations(self):
+    @staticmethod
+    def _do_migrations():
         current_dir = os.path.dirname(__file__)
         migrations_dir = os.path.join(current_dir, 'migrations')
         conn = components.get_psql()

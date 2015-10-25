@@ -1,5 +1,3 @@
-from contextlib import closing
-
 import psycopg2
 import psycopg2.extras
 import json
@@ -8,7 +6,7 @@ from microservice import components
 REDIS_KEY = 'microservice_cached_users_all'
 
 
-def get_all(db=None, redis=None):
+def get_all():
     try:
         db = components.get_psql()
         redis = components.get_redis()
@@ -16,7 +14,7 @@ def get_all(db=None, redis=None):
         _save_all_to_redis(redis, result)
         return result
     except psycopg2.DatabaseError:
-        return _get_all_from_redis(redis)
+        return _get_all_from_redis(components.get_redis())
 
 
 def _get_all_from_db(db):

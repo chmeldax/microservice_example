@@ -5,6 +5,7 @@ import getpass
 
 import paramiko
 
+
 class Application(object):
 
     def __init__(self, host: str, name: str, username: str):
@@ -31,14 +32,15 @@ class Application(object):
     def _get_app_path(self):
         return os.path.join('/srv', self._name)
 
-    def _prepare_ssh_key(self):
+    @staticmethod
+    def _prepare_ssh_key():
         filename = os.path.expanduser('~/.ssh/id_rsa')
         password = getpass.getpass('Supply password for your SSH key please:')
         return paramiko.RSAKey.from_private_key_file(filename, password)
 
     def _setup(self):
         app_path = self._get_app_path()
-        releases_path =  os.path.join(self._get_app_path(), 'releases')
+        releases_path = os.path.join(self._get_app_path(), 'releases')
         self._perform_ssh_command('mkdir -p {} && mkdir -p {}'.format(app_path, releases_path))
 
     def _check(self):
@@ -51,7 +53,6 @@ class Application(object):
         self._perform_ssh_command('mkdir -p {}'.format(version_path))
         subprocess.call("rsync -avz --exclude .git --exclude env -e ssh {} {}@{}:{}".
                         format(local_path, self._username, self._host, version_path), shell=True)
-
 
     def _promote(self):
         releases_path = os.path.join(self._get_app_path(), 'releases')

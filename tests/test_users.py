@@ -10,12 +10,12 @@ from werkzeug.wrappers import BaseResponse
 from microservice import users, components, main
 from tests.helpers import TestDatabase, generate_name
 
+
 class TestUsers(unittest.TestCase):
 
     def setUp(self):
         self._old_redis_key = users.REDIS_KEY
         users.REDIS_KEY = 'microservice-' + generate_name()
-
 
     def tearDown(self):
         users.REDIS_KEY = self._old_redis_key
@@ -49,16 +49,16 @@ class TestUsersIntegration(unittest.TestCase):
         users.REDIS_KEY = 'microservice-' + generate_name()
 
     def test_get_all(self):
-         with closing(TestDatabase()) as test_db:
+        with closing(TestDatabase()) as test_db:
             test_db.use_table('users')
             with unittest.mock.patch('microservice.components.get_psql') as db_mock:
                 db_mock.return_value = test_db.connection
 
                 json_rpc = {
-                    "jsonrpc":"2.0",
-                    "id":1,
-                    "method":"get_users",
-                    "params":[]
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "get_users",
+                    "params": []
                 }
                 client = Client(main.application, BaseResponse)
                 response = client.post(data=json.dumps(json_rpc))
@@ -76,5 +76,5 @@ class TestUsersIntegration(unittest.TestCase):
         users.REDIS_KEY = self._old_redis_key
 
 
-if __name__ == 'main':
+if __name__ == '__main__':
     unittest.main()

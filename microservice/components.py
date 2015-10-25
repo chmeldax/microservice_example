@@ -10,10 +10,11 @@ def get_psql(dbname=None):
         cfg['database'] = dbname
     return psycopg2.connect(**cfg)
 
+
 def get_redis():
     cfg = config.get_config()['redis'].copy()
     return redis.Redis(decode_responses=True, **cfg)
 
+
 def get_riemann():
     return
-

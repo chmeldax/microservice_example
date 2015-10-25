@@ -3,6 +3,7 @@ from jsonrpc import JSONRPCResponseManager, dispatcher
 
 from microservice import users
 
+
 @dispatcher.add_method
 def get_users(**kwargs):
     return users.get_all()

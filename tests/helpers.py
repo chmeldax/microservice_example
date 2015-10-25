@@ -53,7 +53,8 @@ class TestDatabase(object):
             cur.execute(sql, params)
         self._conn.commit()
 
-    def _create_fill_sql_and_params(self, name, columns, rows):
+    @staticmethod
+    def _create_fill_sql_and_params(name, columns, rows):
         # TODO: Refactoring
         keys = ['%s'] * len(rows[0])
         sql = 'INSERT INTO ' + name + ' (' + ','.join(columns) + ') VALUES '
@@ -64,6 +65,7 @@ class TestDatabase(object):
         self._conn.close()
         with self._ddl_conn.cursor() as cur:
             cur.execute('DROP DATABASE ' + self._name)
+
 
 def generate_name():
     timestamp = int(time.time())
