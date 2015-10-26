@@ -48,7 +48,9 @@ class TestUsersIntegration(unittest.TestCase):
         self._old_redis_key = users.REDIS_KEY
         users.REDIS_KEY = 'microservice-' + generate_name()
 
-    def test_get_all(self):
+    @unittest.mock.patch('microservice.components.get_raven')
+    @unittest.mock.patch('microservice.components.get_riemann')
+    def test_get_all(self, raven_mock, riemann_mock):
         with closing(TestDatabase()) as test_db:
             test_db.use_table('users')
             with unittest.mock.patch('microservice.components.get_psql') as db_mock:

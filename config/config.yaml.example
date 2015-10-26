@@ -1,0 +1,29 @@
+test:
+  psql:
+    database: dbname
+    user: dbuser
+    password: dbpass
+  redis:
+    host: localhost
+    port: 6379
+    db: 0
+  sentry:
+    dsn: http://public:secret@example.com/project-id
+  riemann:
+    host: localhost
+    port: 5555
+
+production:
+  psql:
+    database: dbname
+    user: dbuser
+    password: dbpass
+  redis:
+    host: localhost
+    port: 6379
+    db: 0
+  sentry:
+    dsn: http://public:secret@example.com/project-id
+  riemann:
+    host: localhost
+    port: 5555
