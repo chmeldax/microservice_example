@@ -101,6 +101,8 @@ But definitely, there are a lot more approaches than just this one. I can think 
 by Docker, orchestrated for example by Kubernetes etc. Also, making installable packages with some build server
 (like Jenkins) can be a way to go. I am curious about your favourite way of doing things, guys :).
 
+Also, we should probably use supervisor.d for taking about running/stopping the app. Alternatively, I believe `upstart` can also be a good solution.
+
 Just one remark about provisioning. The solution with introducing separate config file and deploying it with
 the codebase is a bit ugly. I would prefer provisioning it by Puppet and/or implementing somekind of service discovery
 solution (like Consul). But well, I hope my solution is good enough.
