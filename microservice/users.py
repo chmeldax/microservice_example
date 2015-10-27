@@ -2,6 +2,8 @@ import psycopg2
 import psycopg2.extras
 import json
 
+from redis.exceptions import ConnectionError
+
 from microservice import components
 
 REDIS_KEY = 'microservice_cached_users_all'
@@ -36,5 +38,8 @@ def _get_all_from_redis(redis):
 
 
 def _save_all_to_redis(redis, users: list):
-    cached_response = json.dumps(users)
-    redis.set(REDIS_KEY, cached_response)
+    try:
+        cached_response = json.dumps(users)
+        redis.set(REDIS_KEY, cached_response)
+    except ConnectionError:
+        pass
