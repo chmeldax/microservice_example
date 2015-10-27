@@ -11,16 +11,29 @@ from microservice import components
 class Microservice(Application):
 
     def _check(self):
+        """
+        We need config file to run the app. Should be probably provisioned by Puppet or sth like that.
+        :return: None
+        """
         current_dir = os.path.dirname(__file__)
         if not os.path.isfile(os.path.join(current_dir, 'config', 'config.yaml')):
             raise RuntimeError('config/config.yaml is missing.')
 
     def _after_deploy(self):
+        """
+        Runs build after deploying. Make clean is run to prune all env, pyc, pyo and other files.
+        Code should be probably pulled by git. Or not?
+        :return: None
+        """
         version_path = os.path.join(self._get_app_path(), 'releases', self._version)
         self._perform_ssh_command('cd {} && make clean && make'.format(version_path))
         self._do_migrations()
 
     def _after_promote(self):
+        """
+        Creates symlink to the last deploy. Also restarts gunicorn.
+        :return: None
+        """
         current_path = os.path.join(self._get_app_path(), 'releases', 'current')
         pid_file = os.path.join(self._get_app_path(), 'releases', 'gunicorn.pid')
         self._perform_ssh_command(

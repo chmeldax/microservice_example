@@ -19,7 +19,7 @@ class TestDatabase(object):
 
     def use_table(self, table_name: str):
         """
-
+        Creates table in the test database and fills it with data from the CSV file.
         :param table_name: Name of the table
         :return: None
         """

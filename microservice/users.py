@@ -1,12 +1,19 @@
 import psycopg2
 import psycopg2.extras
 import json
+
 from microservice import components
 
 REDIS_KEY = 'microservice_cached_users_all'
 
 
-def get_all():
+def get_all() -> list:
+    """
+    Gets list of all users in the DB.
+    If any error occurs when pulling data from the DB, we use cached data in the Redis.
+    If even that fails, exception will be raised.
+    :return: list
+    """
     try:
         db = components.get_psql()
         redis = components.get_redis()
